@@ -10,11 +10,12 @@ import {
   CharacteristicEventTypes
 } from "homebridge";
 import { AweSomeHTTPConfig } from "./configTypes";
+import request = require("superagent");
+import cacheModule = require("cache-service-cache-module");
+import superagentCache = require("superagent-cache-plugin");
 
-var request = require("superagent");
-var cacheModule = require("cache-service-cache-module");
-var cache = new cacheModule({ storage: "session", defaultExpiration: 60 });
-var superagentCache = require("superagent-cache-plugin")(cache);
+const cache = new cacheModule({ storage: "session", defaultExpiration: 60 });
+const sacache = superagentCache(cache);
 
 export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
 
@@ -36,7 +37,7 @@ export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
 
     // Force this to AwesomeConfig.
     this.log = log;
-    this.aweSomeConfig = config as any;
+    this.aweSomeConfig = <unknown>config as AweSomeHTTPConfig;
     if ( !this.aweSomeConfig.switches ) {
       log.info("No config yet. Go to settings and start configuring");
       this.numberOfSwitches = 0;
@@ -56,10 +57,10 @@ export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
       this.aweSomeConfig.switches.forEach(aSwitch => {
         log.debug("Starting to configure Service " + aSwitch.name);
 
-        var switchService: Service = new hap.Service.Switch(aSwitch.name, aSwitch.name);
-        var statusUrl: string = this.aweSomeConfig.baseurl + aSwitch.statusUrl;
-        var onUrl: string = this.aweSomeConfig.baseurl + aSwitch.onUrl;
-        var offUrl: string = this.aweSomeConfig.baseurl + aSwitch.offUrl;
+        const switchService: Service = new hap.Service.Switch(aSwitch.name, aSwitch.name);
+        const statusUrl: string = this.aweSomeConfig.baseurl + aSwitch.statusUrl;
+        const onUrl: string = this.aweSomeConfig.baseurl + aSwitch.onUrl;
+        const offUrl: string = this.aweSomeConfig.baseurl + aSwitch.offUrl;
 
         switchService.getCharacteristic(hap.Characteristic.On)
           .on(CharacteristicEventTypes.GET, (callback: CharacteristicGetCallback) => {
@@ -84,15 +85,16 @@ export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   getRemoteState(httpMethod: string, url: string, log: Logging, callback): void {
     log.debug("HTTP REQUEST CALLLING " + url + " Cache:" + this.aweSomeConfig.cacheExpiration);
     request(httpMethod, url)
       .set("Accept", "application/json")
-      .use(superagentCache)
+      .use(sacache)
       .expiration(this.aweSomeConfig.cacheExpiration)
       .end(function (err, res, key) {
         if (err) {
-          log.warn("HTTP failure");
+          log.warn("HTTP failure " + key);
           log.warn(err);
         } else {
           log.debug("HTTP success Light on is %s", res.body.on);

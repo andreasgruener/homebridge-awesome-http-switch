@@ -1,7 +1,7 @@
 import { AccessoryPlugin, API, HAP, Logging, PlatformConfig, StaticPlatformPlugin, } from "homebridge";
 import { AwesomeHTTPSwitchAccessory } from "./aweSomeSwitchAccessory";
 import { AweSomeHTTPConfig } from "./configTypes";
-import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
+import { PLATFORM_NAME } from "./settings";
 
 /*
  * IMPORTANT NOTICE
@@ -27,6 +27,7 @@ import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
  */
 let hap: HAP;
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export = (api: API) => {
   hap = api.hap;
   api.registerPlatform(PLATFORM_NAME, AwesomePlatform);
@@ -41,11 +42,12 @@ class AwesomePlatform implements StaticPlatformPlugin {
 
   constructor(log: Logging, config: PlatformConfig, api: API) {
     this.log = log;
-
+   log.debug("API " + api.serverVersion);
+    
     // probably parse config or something here
     this.config = config;
 
-    this.aweSomeConfig = config as any;
+    this.aweSomeConfig = <unknown>config as AweSomeHTTPConfig;
     if (!this.aweSomeConfig.switches) {
       log.info("No config for switches yet. Go to settings and start configuring");
     }
