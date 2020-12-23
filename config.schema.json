@@ -1,0 +1,89 @@
+{
+  "pluginAlias": "homebridge-awesome-http-switch",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Homebridge awesome exposes http based switches and lights to homekit. Great for IoT, especially ESP based projects.",
+  "footerDisplay": "A rest-like api call for the switches is required.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name of your accessory",
+        "type": "string",
+        "required": true,
+        "default": "My Switches and lights"
+      },
+      "baseurl": {
+        "title": "Base URL",
+        "type": "string",
+        "description": "Base url to manage and retrieve information about your lights",
+        "required": true,
+        "default": "http://livingroom.local"
+      },
+      "cacheExpiration": {
+        "title": "Cache Expiration in seconds",
+        "type": "number",
+        "description": "we will not run a denial of service attack on your IoT, so we keep status cached for a bit",
+        "required": true,
+        "placeholder": "5",
+        "default": "5"
+      },
+      "displayName": {
+        "title": "DisplayName",
+        "type": "string",
+        "required": true,
+        "default": "My Crib"
+      },
+      "model": {
+        "title": "model",
+        "type": "string",
+        "required": true,
+        "default": "ESP8266 based WebServer"
+      },
+      "manufacturer": {
+        "title": "manufacturer",
+        "type": "string",
+        "required": true,
+        "default": "Homebridge Community"
+      },
+      "switches": {
+        "type": "array",
+        "title": "Your lights",
+        "items": {
+          "type": "object",
+          "title": "Lights Configuration",
+          "properties": {
+            "name": {
+              "title": "Name of Light",
+              "description": "A nice name displayed in Homekit",
+              "type": "string",
+              "placeholder": "My Light",
+              "required": true
+            },
+            "statusUrl": {
+              "title": "Status URL",
+              "description": "partial URL to retrieve status (base + partial)",
+              "type": "string",
+              "placeholder": "/crib/mainlight",
+              "required": true
+            },
+            "onUrl": {
+              "title": "Turn ON URL",
+              "description": "partial URL to turn light on (base + partial)",
+              "type": "string",
+              "placeholder": "/crib/mainlight/on",
+              "required": true
+            },
+            "offUrl": {
+              "title": "Turn Off URL",
+              "description": "partial URL to turn light off (base + partial)",
+              "type": "string",
+              "placeholder": "/crib/mainlight/off",
+              "required": true
+            }
+          }
+        }
+      }
+    }
+  }
+}
