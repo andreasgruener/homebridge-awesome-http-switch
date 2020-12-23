@@ -3,6 +3,7 @@ export interface AweSomeHTTPSwitchConfigInterface {
     name : string,
     statusUrl: string,
     httpMethod: string,
+    contentType: string,
     onUrl: string,
     offUrl: string
 }

@@ -1,5 +1,5 @@
 {
-  "pluginAlias": "homebridge-awesome-http-switch",
+  "pluginAlias": "Awesome",
   "pluginType": "platform",
   "singular": true,
   "headerDisplay": "Homebridge awesome exposes http based switches and lights to homekit. Great for IoT, especially ESP based projects.",
@@ -58,6 +58,20 @@
               "description": "A nice name displayed in Homekit",
               "type": "string",
               "placeholder": "My Light",
+              "required": true
+            },
+            "httpMethod": {
+              "title": "HTTP Method",
+              "description": "how should we access the server",
+              "type": "string",
+              "placeholder": "GET",
+              "required": true
+            },
+            "contentType": {
+              "title": "HTTP Content Type",
+              "description": "what kind of data should we expect",
+              "type": "string",
+              "placeholder": "application/json",
               "required": true
             },
             "statusUrl": {

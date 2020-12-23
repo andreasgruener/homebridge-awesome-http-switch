@@ -1,6 +1,7 @@
-import {AccessoryPlugin, API, HAP, Logging, PlatformConfig, StaticPlatformPlugin,} from "homebridge";
-import {AwesomeHTTPSwitchAccessory} from "./aweSomeSwitchAccessory";
-import {PLATFORM_NAME, PLUGIN_NAME} from "./settings";
+import { AccessoryPlugin, API, HAP, Logging, PlatformConfig, StaticPlatformPlugin, } from "homebridge";
+import { AwesomeHTTPSwitchAccessory } from "./aweSomeSwitchAccessory";
+import { AweSomeHTTPConfig } from "./configTypes";
+import { PLATFORM_NAME, PLUGIN_NAME } from "./settings";
 
 /*
  * IMPORTANT NOTICE
@@ -28,21 +29,26 @@ let hap: HAP;
 
 export = (api: API) => {
   hap = api.hap;
-
   api.registerPlatform(PLATFORM_NAME, AwesomePlatform);
-};
+}
 
 class AwesomePlatform implements StaticPlatformPlugin {
 
   private readonly log: Logging;
   private readonly config: PlatformConfig;
 
+  aweSomeConfig: AweSomeHTTPConfig;
+
   constructor(log: Logging, config: PlatformConfig, api: API) {
     this.log = log;
 
     // probably parse config or something here
     this.config = config;
-    
+
+    this.aweSomeConfig = config as any;
+    if (!this.aweSomeConfig.switches) {
+      log.info("No config for switches yet. Go to settings and start configuring");
+    }
     log.info("Awesome Platform finished initializing!");
   }
 
@@ -53,9 +59,15 @@ class AwesomePlatform implements StaticPlatformPlugin {
    * The set of exposed accessories CANNOT change over the lifetime of the plugin!
    */
   accessories(callback: (foundAccessories: AccessoryPlugin[]) => void): void {
-    callback([
-      new AwesomeHTTPSwitchAccessory(hap, this.log, this.config),
-    ]);
+    this.log.info("Adding accessory " +this.config.name + " / " + this.config.displayName);
+    if (!this.aweSomeConfig.switches) {
+      this.log.info("No config for switches yet. Return no accessory.");
+      callback([]);
+    } else {
+      callback([
+        new AwesomeHTTPSwitchAccessory(hap, this.log, this.config),
+      ]);
+    }
   }
 
 }
