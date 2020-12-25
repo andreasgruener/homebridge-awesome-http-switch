@@ -42,7 +42,7 @@ export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
       log.info("No config yet. Go to settings and start configuring");
       this.numberOfSwitches = 0;
       this.services = new Array<Service>();
-      this.name = "noconfig";
+      this.name = "no-config";
     }
     else {
       this.name = this.aweSomeConfig.name;
@@ -87,7 +87,7 @@ export class AwesomeHTTPSwitchAccessory implements AccessoryPlugin {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   getRemoteState(httpMethod: string, url: string, log: Logging, callback): void {
-    log.debug("HTTP REQUEST CALLLING " + url + " Cache:" + this.aweSomeConfig.cacheExpiration);
+    log.debug("HTTP REQUEST CALLING " + url + " Cache:" + this.aweSomeConfig.cacheExpiration);
     request(httpMethod, url)
       .set("Accept", "application/json")
       .use(sacache)

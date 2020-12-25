@@ -1,8 +1,8 @@
 {
-  "displayName": "Homebridge for HTTP based Switche, awesome",
+  "displayName": "Homebridge for HTTP based Switches",
   "name": "homebridge-awesome-http-switch",
-  "version": "1.0.5",
-  "description": "Flexible bridge fot http based lights/switches",
+  "version": "1.0.6",
+  "description": "Flexible bridge for http based lights/switches",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",

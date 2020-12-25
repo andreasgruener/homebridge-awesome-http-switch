@@ -17,12 +17,6 @@ export interface AweSomeHTTPConfigInterface {
     model : string,
     manufacturer : string
   }
-  
-
-
-// We use types instead of interfaces here because we can more easily set the entire thing as readonly.
-// Unfortunately, interfaces can't be quickly set as readonly in Typescript without marking each and
-// every property as readonly along the way.
 
 export type AweSomeHTTPConfig = Readonly<AweSomeHTTPConfigInterface>;
 export type AweSomeHTTPSwitchConfig = Readonly<AweSomeHTTPSwitchConfigInterface>;
